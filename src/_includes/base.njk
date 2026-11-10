@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{%- set pageTitle = (title + " | " + site.name) if title else (site.name + ": the diary of " + site.author) -%}
+{%- set pageDesc = description or site.description -%}
+{%- set canonical = page.url | absUrl(site.url) -%}
+<title>{{ pageTitle }}</title>
+<meta name="description" content="{{ pageDesc }}">
+<meta name="author" content="{{ site.author }}">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="{{ canonical }}">
+<link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="{{ '/feed.xml' | absUrl(site.url) }}">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231A0B2E'/%3E%3Ccircle cx='32' cy='32' r='12' fill='%23FFD23F'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:type" content="{{ 'article' if ogType == 'article' else 'website' }}">
+<meta property="og:title" content="{{ pageTitle }}">
+<meta property="og:description" content="{{ pageDesc }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:image" content="{{ (image if image else site.book.cover) | absUrl(site.url) }}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+{% include "schema.njk" %}
+</head>
+<body class="{{ bodyClass }}">
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<header class="bar">
+  <div class="bar-left">
+    <a class="brand" href="/">{{ site.name }}</a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/" {% if page.url == "/" %}aria-current="page"{% endif %}>Diary</a>
+      <a href="/gallery/" {% if page.url == "/gallery/" %}aria-current="page"{% endif %}>Gallery</a>
+      <a href="#write-to-me">Write to me</a>
+    </nav>
+  </div>
+  <div class="clocks" aria-label="Current time">
+    <span class="clock">Lahore <b id="t-lhr">--:--</b></span>
+    <span class="clock">London <b id="t-ldn">--:--</b></span>
+  </div>
+</header>
+
+{{ content | safe }}
+
+<section class="about" aria-labelledby="about-h">
+  <div class="about-inner">
+    <h2 id="about-h">So, you've read my diary?</h2>
+    <div>
+      <p>I'm {{ site.author }}. I write novels, make art, and edit copy for a living. My days start in Lahore and end on UK hours, so most of these pages get written somewhere in between.</p>
+      <p>My first novel is <a href="{{ site.book.url }}" target="_blank" rel="noopener"><em>{{ site.book.title }}</em></a>. My second, <em>Lahore After Dark</em>, is still being written, mostly at night.</p>
+      <p class="sig">{{ site.author }}</p>
+      <nav class="socials" aria-label="Social profiles">
+        {%- for s in site.socials %}
+        <a class="social" href="{{ s.url }}" target="_blank" rel="noopener me">{% include "icons/" + s.icon + ".svg" %}<span>{{ s.name }}</span></a>
+        {%- endfor %}
+      </nav>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="write-to-me" aria-labelledby="contact-h">
+  <div class="contact-inner">
+    <div class="contact-intro">
+      <p class="greet">Dear Huzaifa,</p>
+      <h2 id="contact-h">Got something to tell me?</h2>
+      <p>Did an entry stay with you? Did you read <em>{{ site.book.title }}</em>? Do you just want to say hello from your own time zone? Leave me a note. It lands straight in my inbox, and I read every single one, usually after dark.</p>
+      <p class="mail">Or email me directly at <a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+    </div>
+    <form class="note" name="contact" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="contact">
+      <p class="sr"><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <div class="field">
+        <label for="f-name">Your name</label>
+        <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="100">
+      </div>
+      <div class="field">
+        <label for="f-email">Your email, so I can write back</label>
+        <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="200">
+      </div>
+      <div class="field">
+        <label for="f-msg">Your message</label>
+        <textarea id="f-msg" name="message" required maxlength="5000" placeholder="Write as much or as little as you like."></textarea>
+      </div>
+      <button class="send" type="submit">Send my note</button>
+    </form>
+  </div>
+</section>
+
+<footer>{{ site.name }} &middot; {{ site.author }} &middot; Lahore &middot; <span id="yr">2026</span> &middot; <a href="/feed.xml">RSS</a></footer>
+
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+# Admin panel for Between Two Clocks (Sveltia CMS)
+# GitHub repository that stores the diary entries.
+backend:
+  name: github
+  repo: Huzaifaali60/between-two-clocks
+  branch: main
+  commit_messages:
+    create: "New diary entry: {{slug}}"
+    update: "Edit diary entry: {{slug}}"
+    delete: "Delete diary entry: {{slug}}"
+
+site_url: /
+display_url: /
+logo_url: /img/but-this-cover.jpg
+
+media_folder: src/img/uploads
+public_folder: /img/uploads
+
+collections:
+  - name: entries
+    label: Diary entries
+    label_singular: Diary entry
+    description: Write, edit or delete your diary pages. Saving publishes the page within a minute or two.
+    folder: src/entries
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{date | date('D MMM YYYY')}}  |  {{title}}  |  {{mood}}{{draft | ternary('  |  DRAFT', '')}}"
+    sortable_fields:
+      fields: [date, title, mood]
+      default:
+        field: date
+        direction: descending
+    preview_path: "/entries/{{slug}}/"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+      - label: Mood
+        name: mood
+        widget: select
+        default: calm
+        options: [inspired, happy, calm, grateful, hopeful, proud, "in love", curious, nostalgic, dreamy, restless, anxious, tired, lonely, sad, heartbroken, angry, numb]
+      - { label: "Keep as a draft (hidden from the site)", name: draft, widget: boolean, default: false, required: false }
+      - { label: "Photo (optional, also shows in the Gallery)", name: image, widget: image, required: false, choose_url: false }
+      - { label: "Photo description (helps Google and screen readers)", name: image_alt, widget: string, required: false }
+      - { label: Entry, name: body, widget: markdown, hint: "Leave an empty line between paragraphs." }

@@ -1,0 +1,15 @@
+---
+permalink: /llms.txt
+eleventyExcludeFromCollections: true
+---
+# {{ site.name }}
+
+> {{ site.description }}
+
+Author: {{ site.author }}, novelist, artist and copyeditor based in Lahore, Pakistan.
+Novel: {{ site.book.title }} ({{ site.book.url }}). Second novel in progress: Lahore After Dark.
+
+## Diary entries
+{% for e in collections.entries %}
+- [{{ e.data.title }}]({{ e.url | absUrl(site.url) }}): {{ e.date | readableDate }}, mood {{ e.data.mood }}
+{%- endfor %}

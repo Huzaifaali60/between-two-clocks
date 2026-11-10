@@ -1,0 +1,29 @@
+---
+layout: base.njk
+title: Gallery
+description: "Photos and pictures from the diary of M. Huzaifa Ali: small moments from Lahore, written on London time."
+permalink: /gallery/
+eleventyExcludeFromCollections: true
+---
+{%- set shots = [] %}
+{%- for e in collections.entries %}{% if e.data.image %}{% set shots = (shots.push(e), shots) %}{% endif %}{% endfor %}
+<main class="gallery-wrap">
+  <header class="gallery-head">
+    <p class="greet">Snapshots from after dark,</p>
+    <h1 class="gallery-title">The Gallery</h1>
+    <p class="lede">Every picture that made it into the diary. Tap one to read the page it belongs to.</p>
+  </header>
+  {%- if shots.length %}
+  <div class="photos">
+    {%- for e in shots %}
+    <a class="polaroid" href="{{ e.url }}" style="--tilt:{{ ['-3deg','2deg','-1.5deg','2.8deg','-2.2deg','1.4deg'][loop.index0 % 6] }}">
+      <img src="{{ e.data.image }}" alt="{{ e.data.image_alt or e.data.title }}" loading="lazy">
+      <span class="cap">{{ e.data.title }}</span>
+      <time datetime="{{ e.date | isoDate }}">{{ e.date | readableDate }}</time>
+    </a>
+    {%- endfor %}
+  </div>
+  {%- else %}
+  <p class="empty">No pictures yet. The first one is coming soon.</p>
+  {%- endif %}
+</main>

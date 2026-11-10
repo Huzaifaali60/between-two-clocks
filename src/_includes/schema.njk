@@ -1,0 +1,57 @@
+{%- set person = {
+  "@type": "Person",
+  "@id": site.url + "/#author",
+  "name": site.author,
+  "alternateName": "Huzaifa Ali",
+  "url": site.url + "/",
+  "jobTitle": "Novelist, artist and copyeditor",
+  "homeLocation": { "@type": "Place", "name": "Lahore, Pakistan" },
+  "sameAs": ["https://www.instagram.com/huzaifaali60/", "https://www.facebook.com/huzaifaali60", "https://www.linkedin.com/in/huzaifaali60/", site.book.url]
+} -%}
+<script type="application/ld+json">
+{%- if ogType == "article" %}
+{{ {
+  "@context": "https://schema.org",
+  "@graph": [
+    person,
+    {
+      "@type": "BlogPosting",
+      "headline": title,
+      "description": description,
+      "datePublished": page.date | isoDate,
+      "dateModified": page.date | isoDate,
+      "mainEntityOfPage": canonical,
+      "url": canonical,
+      "inLanguage": site.lang,
+      "author": { "@id": site.url + "/#author" },
+      "publisher": { "@id": site.url + "/#author" },
+      "image": (image if image else site.book.cover) | absUrl(site.url),
+      "isPartOf": { "@type": "Blog", "@id": site.url + "/#blog", "name": site.name }
+    }
+  ]
+} | json | safe }}
+{%- else %}
+{{ {
+  "@context": "https://schema.org",
+  "@graph": [
+    person,
+    {
+      "@type": "Blog",
+      "@id": site.url + "/#blog",
+      "name": site.name,
+      "url": site.url + "/",
+      "description": site.description,
+      "inLanguage": site.lang,
+      "author": { "@id": site.url + "/#author" }
+    },
+    {
+      "@type": "Book",
+      "name": site.book.title,
+      "author": { "@id": site.url + "/#author" },
+      "image": site.book.cover | absUrl(site.url),
+      "url": site.book.url
+    }
+  ]
+} | json | safe }}
+{%- endif %}
+</script>

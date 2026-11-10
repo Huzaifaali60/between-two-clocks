@@ -1,0 +1,71 @@
+---
+layout: base.njk
+bodyClass: home
+---
+<section class="hero" aria-labelledby="title">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="greet" id="greet">Hello from Lahore,</p>
+      <h1 id="title">Between <span class="two">Two</span><br>Clocks</h1>
+      <p class="lede">A diary by <strong>{{ site.author }}</strong>. Written in <em>Lahore</em>, lived on <em>London</em> time, and open to every night owl.</p>
+    </div>
+    <div class="shelf">
+      <a class="book" href="{{ site.book.url }}" target="_blank" rel="noopener">
+        <span class="book-cover"><img src="{{ site.book.cover }}" width="700" height="993" alt="Cover of {{ site.book.title }}, a novel by {{ site.author }}"></span>
+        <span class="book-label">My novel, {{ site.book.title }}<small>Check it on Goodreads</small></span>
+      </a>
+      <div class="book next" role="img" aria-label="Book two by {{ site.author }}, coming soon">
+        <span class="book-cover"><span class="stars"></span><span class="qmark" aria-hidden="true">?</span></span>
+        <span class="book-label">Book two is brewing<small>Coming soon</small></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- set entries = collections.entries %}
+<section class="year" aria-labelledby="year-label">
+  <div class="year-head">
+    <h2 class="label" id="year-label">Days I wrote in <span id="yr-label">2026</span></h2>
+    <div class="stats">
+      <span><b id="s-count">{{ entries | length }}</b>entries</span>
+      <span><b id="s-words">0</b>words</span>
+      <span><b id="s-streak">0</b>days since last page</span>
+    </div>
+  </div>
+  <div class="grid-wrap"><div class="days" id="days"></div></div>
+</section>
+
+<div class="controls" role="toolbar" aria-label="Filter entries">
+  <div class="chips" id="chips"></div>
+  <label class="search" for="q"><span class="sr">Search entries</span>
+    <input id="q" type="search" placeholder="Search the diary">
+  </label>
+  <button class="random" id="random" type="button">Open a random page</button>
+</div>
+
+<main class="pages" id="pages">
+  <h2 class="sr">Diary entries</h2>
+  {%- for e in entries %}
+  <article class="card" data-mood="{{ e.data.mood }}" data-date="{{ e.date | isoDate }}">
+    <a class="page" href="{{ e.url }}" style="--tilt:{{ ['-2.2deg','1.6deg','-1.1deg','2.4deg','-1.8deg','1.1deg'][loop.index0 % 6] }}">
+      <time class="date" datetime="{{ e.date | isoDate }}">{{ e.date | readableDate }}</time>
+      <h3>{{ e.data.title }}</h3>
+      {%- if e.data.image %}<img class="thumb" src="{{ e.data.image }}" alt="{{ e.data.image_alt or e.data.title }}" loading="lazy">{% endif %}
+      <p>{{ e.content | excerpt(140) }}</p>
+      <span class="meta"><span class="mood">{{ e.data.mood }}</span><span>{{ e.content | readTime }} min read</span></span>
+    </a>
+  </article>
+  {%- else %}
+  <p class="empty">The first page is still being written. Come back after dark.</p>
+  {%- endfor %}
+  <p class="empty" id="no-match" hidden>No pages match that. Try another mood or word.</p>
+</main>
+
+<script>
+window.DIARY = [
+{%- for e in entries %}
+  {"url":{{ e.url | json | safe }},"title":{{ e.data.title | json | safe }},"date":"{{ e.date | isoDate }}","mood":{{ e.data.mood | json | safe }},"words":{{ e.content | wordCount }},"text":{{ (e.data.title + " " + (e.content | stripHtml)) | lower | json | safe }}}{{ "," if not loop.last }}
+{%- endfor %}
+];
+window.MOODS = {{ site.moods | json | safe }};
+</script>

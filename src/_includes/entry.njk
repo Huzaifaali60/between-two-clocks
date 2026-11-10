@@ -1,0 +1,33 @@
+---
+layout: base.njk
+ogType: article
+bodyClass: entry
+---
+{%- set all = collections.entries %}
+{%- set older = all | getNextCollectionItem(page) %}
+{%- set newer = all | getPreviousCollectionItem(page) %}
+<main class="entry-wrap">
+  <a class="back" href="/">&larr; All diary pages</a>
+  <article class="sheet" id="entry" data-id="{{ page.fileSlug }}">
+    <time class="date" datetime="{{ page.date | isoDate }}">{{ page.date | readableDate }}</time>
+    <h1 class="entry-title">{{ title }}</h1>
+    {%- if image %}
+    <figure class="entry-photo">
+      <img src="{{ image }}" alt="{{ image_alt or title }}" loading="eager">
+      {%- if image_alt %}<figcaption>{{ image_alt }}</figcaption>{% endif %}
+    </figure>
+    {%- endif %}
+    <div class="body">
+      {{ content | safe }}
+    </div>
+    <div class="sheet-foot">
+      <span class="mood">{{ mood }}</span>
+      <button class="btn heart" id="heart" type="button" aria-pressed="false">Felt this</button>
+      <button class="btn" id="copy" type="button">Copy link</button>
+    </div>
+  </article>
+  <nav class="pager" aria-label="More diary pages">
+    {%- if older %}<a class="pager-link" href="{{ older.url }}"><small>Older page</small>{{ older.data.title }}</a>{% else %}<span></span>{% endif %}
+    {%- if newer %}<a class="pager-link next" href="{{ newer.url }}"><small>Newer page</small>{{ newer.data.title }}</a>{% endif %}
+  </nav>
+</main>
