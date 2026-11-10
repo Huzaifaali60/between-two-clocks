@@ -1,8 +1,10 @@
 ---
-title: "My book has a page now"
-date: 2026-08-30
+title: My book has a page
+date: 2026-11-11
 mood: proud
-draft: true
+draft: false
+image: ''
+image_alt: ''
 ---
 
 BUT THIS has a home on the internet now. It's a small page, but it's mine, and it says my name next to the word author.
