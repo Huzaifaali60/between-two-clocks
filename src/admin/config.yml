@@ -9,8 +9,8 @@ backend:
     update: "Edit diary entry: {{slug}}"
     delete: "Delete diary entry: {{slug}}"
 
-site_url: /
-display_url: /
+site_url: https://betweentwoclocks.netlify.app
+display_url: https://betweentwoclocks.netlify.app
 logo_url: /img/but-this-cover.jpg
 
 media_folder: src/img/uploads
